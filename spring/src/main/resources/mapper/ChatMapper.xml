@@ -2,6 +2,59 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.hjac.syncho.user.mapper.ChatMapper">
-
+<mapper namespace="com.hjac.syncho.chat.mapper.ChatMapper">
+	<resultMap type="chatRoom" id="chatRoom">
+		<result column="room_id" property="roomId"/>
+		<result column="document_no" property="documentNo"/>
+		<result column="name" property="name"/>
+		<result column="owner_id" property="ownerId"/>
+		<result column="created_at" property="createdAt"/>
+	</resultMap>
+	
+	<select id="getAllChatRooms" resultMap="chatRoom">
+		select *
+		from chatrooms
+	</select>
+	
+	<select id="getChatRoomByRoomId" parameterType="Integer" resultMap="chatRoom">
+		select *
+		from chatrooms
+		where room_id=#{roomId}
+	</select>
+	
+	<insert id="createChatRoom" parameterType="Map">
+		insert into chatrooms(document_no, name, owner_id)
+		values 
+		(
+			#{documentNo}, 
+			#{name}, 
+			(
+				select user_id
+				from users
+				where user_name = #{owner}
+			)
+		)
+	</insert>
+	
+	<update id="updateChatRoom" parameterType="Map">
+		update chatrooms
+		<set>
+			<if test="name != null and name != ''">
+				name = #{name},
+			</if>
+			<if test="owner != null and owner != ''">
+				owner_id = (
+					select user_id
+					from users
+					where user_name = #{owner}
+				),
+			</if>
+		</set>
+		where room_id = #{roomId}
+	</update>
+	
+	<delete id="deleteChatRoom" parameterType="Integer">
+		delete from chatrooms
+		where room_id=#{id}
+	</delete>
 </mapper>
