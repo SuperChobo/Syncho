@@ -2,9 +2,11 @@ package com.hjac.syncho.document.mapper;
 
 import com.hjac.syncho.document.model.DocMember;
 import com.hjac.syncho.document.model.Document;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+@Mapper
 public interface DocumentMapper {
 
     // 내가 소속되어 있는 문서 찾기
