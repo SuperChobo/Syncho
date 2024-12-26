@@ -11,6 +11,19 @@
 		<result column="created_at" property="createdAt"/>
 	</resultMap>
 	
+	<resultMap type="joinedChatRoom" id="joinedChatRoom">
+		<result column="room_id" property="roomId"/>
+		<result column="document_no" property="documentNo"/>
+		<result column="name" property="name"/>
+		<result column="owner_id" property="ownerId"/>
+		<result column="created_at" property="createdAt"/>
+		
+		<result column="joined_at" property="joinedAt"/>
+		<result column="role" property="role"/>
+		<result column="alarm" property="alarm"/>
+		<result column="favorite" property="favorite"/>
+	</resultMap>
+	
 	<select id="getAllChatRooms" resultMap="chatRoom">
 		select *
 		from chatrooms
@@ -57,4 +70,73 @@
 		delete from chatrooms
 		where room_id=#{id}
 	</delete>
+	
+	<sql id="getUserId">
+		(
+			select user_id
+			from users
+			where user_name = #{userName}
+		)
+	</sql>
+	
+	<insert id="joinChatRoom">
+		insert into userchatrooms
+		(
+			user_id, 
+			room_id
+			<if test="role != null and role != ''">
+				, role
+			</if>
+		)
+		values 
+		(
+			<include refid="getUserId"/>, 
+			#{roomId}
+			<if test="role != null and role != ''">
+				, #{role}
+			</if>
+		)
+	</insert>
+	
+	<delete id="quitChatRoom">
+		delete from userchatrooms
+		where user_id = <include refid="getUserId"/>
+		and room_id = #{roomId}
+	</delete>
+	
+	<select id="getRole">
+		select role
+		from userchatrooms
+		where user_id = <include refid="getUserId"/>
+		and room_id = #{roomId}
+	</select>
+	
+	<update id="updateRole">
+		update userchatrooms
+		set role = #{role}
+		where user_id = <include refid="getUserId"/>
+		and room_id = #{roomId}
+	</update>
+	
+	<update id="updateAlarm">
+		update userchatrooms
+		set alarm = #{value}
+		where user_id = <include refid="getUserId"/>
+		and room_id = #{roomId}
+	</update>
+	
+	<update id="updateFavorite">
+		update userchatrooms
+		set favorite = #{value}
+		where user_id = <include refid="getUserId"/>
+		and room_id = #{roomId}
+	</update>
+	
+	<select id="getAllJoinedChatRooms" resultMap="joinedChatRoom">
+		select *
+		from chatrooms c
+		join userchatrooms u
+		on c.room_id = u.room_id
+		where u.user_id = <include refid="getUserId"/>
+	</select>
 </mapper>

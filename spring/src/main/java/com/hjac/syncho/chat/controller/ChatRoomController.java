@@ -1,5 +1,6 @@
 package com.hjac.syncho.chat.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hjac.syncho.chat.model.ChatRoom;
+import com.hjac.syncho.chat.model.JoinedChatRoom;
 import com.hjac.syncho.chat.service.ChatService;
 import com.hjac.syncho.chat.service.ChatServiceImpl;
 
@@ -49,11 +51,6 @@ public class ChatRoomController {
 		}
 	}
 	
-//	@GetMapping("/user/{id}")
-//	public ResponseEntity<?> getChatRoomByUserId(@PathVariable int id) {
-//		return null;
-//	}
-	
 	@PostMapping("/")
 	public ResponseEntity<?> createChatRoom(@RequestParam Map<String, String> params) {
 		try {
@@ -67,8 +64,8 @@ public class ChatRoomController {
 	
 	@PostMapping("/{id}")
 	public ResponseEntity<?> updateChatRoom(@RequestParam Map<String, String> params, @PathVariable int id) {
+		params.put("roomId", String.valueOf(id));
 		try {
-			params.put("roomId", String.valueOf(id));
 			chatService.updateChatRoom(params);
 			return ResponseEntity.ok("성공적으로 수정되었습니다.");
 		} catch (Exception e) {
@@ -82,6 +79,96 @@ public class ChatRoomController {
 		try {
 			chatService.deleteChatRoom(id);
 			return ResponseEntity.ok("성공적으로 제거되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+		}
+	}
+	
+	@PostMapping("/join/{roomId}")
+	public ResponseEntity<?> joinChatRoom(@RequestParam Map<String, String> params, @PathVariable int roomId) {
+		params.put("roomId", String.valueOf(roomId));
+		try {
+			chatService.joinChatRoom(params);
+			return ResponseEntity.ok("성공적으로 가입 되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+		}
+	}
+	
+	@PostMapping("/quit/{roomId}")
+	public ResponseEntity<?> quitChatRoom(@RequestParam Map<String, String> params, @PathVariable int roomId) {
+		params.put("roomId", String.valueOf(roomId));
+		try {
+			chatService.quitChatRoom(params);
+			return ResponseEntity.ok("성공적으로 퇴장하였습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+		}
+	}
+	
+	@GetMapping("/role/{roomId}")
+	public ResponseEntity<?> getRole(@RequestParam Map<String, String> params, @PathVariable int roomId) {
+		params.put("roomId", String.valueOf(roomId));
+		try {
+			Map<String, String> output = new HashMap<>();
+			output.put("role", chatService.getRole(params));
+			return ResponseEntity.ok(output);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+		}
+	}
+	
+	@PostMapping("/role/{roomId}")
+	public ResponseEntity<?> updateRole(@RequestParam Map<String, String> params, @PathVariable int roomId) {
+		params.put("roomId", String.valueOf(roomId));
+		try {
+			chatService.updateRole(params);
+			return ResponseEntity.ok("성공적으로 업데이트 하였습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+		}
+	}
+	
+	@GetMapping("/join")
+	public ResponseEntity<?> getAllJoinedChatRooms(@RequestParam Map<String, String> params) {
+		try {
+			List<JoinedChatRoom> rooms = chatService.getAllJoinedChatRooms(params);
+			return ResponseEntity.ok(rooms);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+		}
+	}
+	
+	
+	@PostMapping("/alarm/{roomId}/{value}")
+	public ResponseEntity<?> updateAlarm(@RequestParam Map<String, String> params, @PathVariable int roomId, @PathVariable String value) {
+		params.put("roomId", String.valueOf(roomId));
+		params.put("value", value);
+		
+		try {
+			chatService.updateAlarm(params);
+			return ResponseEntity.ok("성공적으로 업데이트 하였습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+		}
+	}
+	
+	
+	@PostMapping("/favorite/{roomId}/{value}")
+	public ResponseEntity<?> updateFavorite(@RequestParam Map<String, String> params, @PathVariable int roomId, @PathVariable String value) {
+		params.put("roomId", String.valueOf(roomId));
+		params.put("value", value);
+		
+		try {
+			chatService.updateFavorite(params);
+			return ResponseEntity.ok("성공적으로 업데이트 하였습니다.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
