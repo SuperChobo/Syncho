@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.hjac.syncho.chat.mapper.ChatMapper;
 import com.hjac.syncho.chat.model.ChatRoom;
 import com.hjac.syncho.chat.model.JoinedChatRoom;
+import com.hjac.syncho.chat.model.Message;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -77,4 +78,20 @@ public class ChatServiceImpl implements ChatService {
 	public List<JoinedChatRoom> getAllJoinedChatRooms(Map<String, String> params) {
 		return chatMapper.getAllJoinedChatRooms(params);
 	}
+	
+	@Override
+	public void createChatting(Map<String, String> params) {
+		chatMapper.createChatting(params);
+	}
+	
+	@Override
+	public List<Message> getChattingsByRoomId(int roomId) {
+		return chatMapper.getChattingsByRoomId(roomId);
+	}
+	
+	@Override
+	public void deleteChatting(int messageId) {
+		chatMapper.deleteChatting(messageId);
+	}
+		
 }

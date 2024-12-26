@@ -24,6 +24,14 @@
 		<result column="favorite" property="favorite"/>
 	</resultMap>
 	
+	<resultMap type="message" id="message">
+		<result column="message_id" property="messageId"/>
+		<result column="room_id" property="roomId"/>
+		<result column="user_name" property="userName"/>
+		<result column="content" property="content"/>
+		<result column="send_at" property="sendAt"/>
+	</resultMap>
+	
 	<select id="getAllChatRooms" resultMap="chatRoom">
 		select *
 		from chatrooms
@@ -139,4 +147,22 @@
 		on c.room_id = u.room_id
 		where u.user_id = <include refid="getUserId"/>
 	</select>
+	
+	<insert id="createChatting">
+		insert into messages(room_id, user_id, content)
+		values (#{roomId}, <include refid="getUserId"/>, #{content})
+	</insert>
+	
+	<select id="getChattingsByRoomId" resultMap="message">
+		select *
+		from messages
+		join users
+		on messages.user_id = users.user_id
+		where room_id = #{roomId}
+	</select>
+	
+	<delete id="deleteChatting" parameterType="Integer">
+		delete from messages
+		where message_id = #{messageId}
+	</delete>
 </mapper>
