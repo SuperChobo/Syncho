@@ -195,7 +195,7 @@ CREATE TABLE `syncho`.`userchatrooms` (
   `joined_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `role` VARCHAR(45) NULL,
   `alarm` INT NULL DEFAULT 1,
-  `favorite` INT NULL DEFAULT 1,
+  `favorite` INT NULL DEFAULT 0,
   PRIMARY KEY (`userchatrooms_id`),
   INDEX `userchatrooms_user_id_idx` (`user_id` ASC) VISIBLE,
   INDEX `userchatrooms_room_id_idx` (`room_id` ASC) VISIBLE,
