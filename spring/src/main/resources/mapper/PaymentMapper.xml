@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.hjac.syncho.user.mapper.PaymentMapper">
+<mapper namespace="com.hjac.syncho.payment.mapper.PaymentMapper">
+
+    <!-- Payment 등록 -->
+    <insert id="insertPayment" parameterType="com.hjac.syncho.payment.model.Payment">
+        INSERT INTO payment (user_id, subscription_id, amount, payment_status, payment_date, transaction_id)
+        VALUES (#{userId}, #{subscriptionId}, #{amount}, #{paymentStatus}, #{paymentDate}, #{transactionId})
+    </insert>
+
+    <!-- Subscription 조회 -->
+    <select id="selectSubscriptionByUserId" parameterType="int" resultType="com.hjac.syncho.payment.model.Payment">
+        SELECT * FROM payment WHERE user_id = #{userId}
+    </select>
 
 </mapper>
