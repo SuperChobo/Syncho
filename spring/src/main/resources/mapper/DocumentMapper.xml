@@ -2,6 +2,83 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.hjac.syncho.user.mapper.DocumentMapper">
+<mapper namespace="com.hjac.syncho.document.mapper.DocumentMapper">
+	<resultMap id="docMember" type="com.hjac.syncho.document.model.DocMember">
+		<result column="member_no" property="memberNo" />
+		<result column="doc_no" property="docNo" />
+		<result column="user_id" property="userId" />
+		<result column="join_date" property="joinDate" />
+		<result column="member_role" property="memberRole" />
+		<result column="last_update" property="lastUpdate" />
+	</resultMap>
+
+	<resultMap id="document" type="com.hjac.syncho.document.model.Document">
+		<result column="doc_no" property="docNo" />
+		<result column="doc_name" property="docName" />
+		<result column="doc_detail" property="docDetail" />
+		<result column="doc_date" property="docDate" />
+		<result column="last_updated" property="lastUpdated" />
+		<result column="last_member_id" property="lastMemberId" />
+		<result column="parent_no" property="parentNo" />
+	</resultMap>
+	
+	<select id="findMyDocument" resultMap="document" parameterType="com.hjac.syncho.document.model.DocMember">
+		SELECT d.*
+		FROM documents d, document_members m
+		WHERE d.doc_no = m.doc_no AND m.user_id = #{userId}
+		ORDER BY m.last_update DESC
+	</select>
+
+	<select id="myDocumentCount" parameterType="com.hjac.syncho.document.model.DocMember" resultType="int">
+		SELECT cnt(doc_no)
+		FROM documents
+		WHERE doc_no IN (SELECT doc_no FROM document_members WHERE user_id = #{userId})
+	</select>
+
+	<!--  문서 생성 쿼리	-->
+	<insert id="createDocument" parameterType="com.hjac.syncho.document.model.Document" keyProperty="docNo">
+		INSERT INTO documents (doc_name, parent_no)
+		VALUES (#{docName}, #{parentNo})
+		RETURNING doc_no
+	</insert>
+
+	<!--  문서 그룹원 추가 -->
+	<insert id="createMember" parameterType="com.hjac.syncho.document.model.DocMember">
+		INSERT INTO document_members (doc_no, user_id, member_role)
+		VALUES (#{docNo}, #{userId}, #{memberRole})
+	</insert>
+
+	<select id="showDocument" parameterType="String" resultMap="document">
+		SELECT *
+		FROM documents
+		WHERE doc_no = #{docNo}
+	</select>
+
+	<select id="showDocumentMember" parameterType="String" resultMap="docMember">
+		SELECT *
+		FROM document_members
+		WHERE doc_no = #{docNo}
+	</select>
+
+	<update id="changeMemberRole" parameterType="com.hjac.syncho.document.model.DocMember">
+		UPDATE document_members
+		SET member_role = #{memberRole}
+		WHERE doc_no = #{docNo}, user_id = #{userId}
+	</update>
+
+	<delete id="deleteMember" parameterType="com.hjac.syncho.document.model.DocMember">
+		DELETE FROM document_members
+		WHERE doc_no = #{docNo} AND user_id = #{userId}
+	</delete>
+
+	<delete id="deleteAllMember" parameterType="String">
+		DELETE FROM document_members
+		WHERE doc_no = #{docNo}
+	</delete>
+
+	<delete id="deleteDocument" parameterType="String">
+		DELETE FROM documents
+		WHERE doc_no = #{docNo}
+	</delete>
 
 </mapper>
