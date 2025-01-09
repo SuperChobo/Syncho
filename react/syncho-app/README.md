@@ -1,70 +1,119 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 📁 React 프로젝트 파일 구조
 
-## Available Scripts
+이 문서는 React 프로젝트에서 사용된 **파일 구조**와 각 폴더의 역할을 설명합니다. 유지보수와 확장성을 고려한 체계적인 구조입니다.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 📂 `src/`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+`src/` 디렉토리는 React 애플리케이션의 모든 소스 코드를 포함합니다. 아래는 주요 폴더와 그 역할을 설명한 구조입니다:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+src/
+├── assets/        # 정적 파일(이미지, 폰트, JSON 데이터 등)
+├── components/    # 재사용 가능한 UI 컴포넌트
+├── hooks/         # 커스텀 React 훅
+├── pages/         # 라우팅에 사용되는 페이지 컴포넌트
+├── styles/        # 전역 및 공통 스타일 파일(CSS/SCSS)
+└── App.js         # 애플리케이션의 루트 컴포넌트
+```
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 📂 `assets/`
+**정적 리소스(Static Assets)**를 저장하는 디렉토리입니다.  
+이미지, 폰트, JSON 파일, 오디오/비디오 파일 등을 포함합니다.
 
-### `npm run build`
+예시:
+```
+assets/
+├── images/        # 이미지 파일
+│   ├── logo.png
+│   └── banner.jpg
+├── fonts/         # 폰트 파일
+│   └── Roboto.ttf
+└── data/          # JSON 데이터
+    └── config.json
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 📂 `components/`
+재사용 가능한 **UI 컴포넌트**를 저장하는 디렉토리입니다.  
+버튼, 모달, 카드 등 다양한 컴포넌트를 이곳에 관리합니다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+예시:
+```
+components/
+├── Button/
+│   ├── Button.js
+│   ├── Button.css
+│   └── index.js
+├── Modal/
+│   ├── Modal.js
+│   └── Modal.css
+└── Navbar/
+    ├── Navbar.js
+    ├── Navbar.css
+    └── index.js
+```
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 📂 `hooks/`
+React의 **로직 재사용**을 위한 커스텀 훅(Custom Hooks)을 저장합니다.  
+API 호출, 상태 관리, 디바운스 처리 등 로직을 캡슐화합니다.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+예시:
+```
+hooks/
+├── useFetch.js       # 데이터 Fetch 훅
+├── useLocalStorage.js # 로컬 스토리지 관리 훅
+└── useDebounce.js    # 디바운스 처리 훅
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 📂 `pages/`
+React 애플리케이션의 **페이지 컴포넌트**를 저장하는 디렉토리입니다.  
+각 페이지는 라우팅과 연결되며, 내부적으로 여러 컴포넌트를 조합합니다.
 
-## Learn More
+예시:
+```
+pages/
+├── Home/
+│   ├── Home.js
+│   └── Home.css
+├── About/
+│   ├── About.js
+│   └── About.css
+└── Contact/
+    ├── Contact.js
+    └── Contact.css
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 📂 `styles/`
+프로젝트 전역 스타일이나 공통 스타일 파일을 저장합니다.  
+CSS 변수, 초기화 파일, 테마 관련 스타일 등을 포함합니다.
 
-### Code Splitting
+예시:
+```
+styles/
+├── reset.css       # 브라우저 초기화 스타일
+├── variables.css   # CSS 변수(색상, 폰트 크기 등)
+├── theme.css       # 테마 스타일
+└── mixins.css      # SCSS Mixin (선택적)
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+### 📄 `App.js`
+애플리케이션의 **최상위 컴포넌트**로, 전체 UI의 루트 역할을 합니다.  
+다른 컴포넌트와 페이지를 불러와 애플리케이션 구조를 정의합니다.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 😊✨
